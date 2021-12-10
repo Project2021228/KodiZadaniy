@@ -1,0 +1,35 @@
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <algorithm>
+using namespace std;
+
+int main(){
+    fstream file("17-257.txt");
+    int mn1=10000, mn2=10000, count=0, count2=0;
+    vector<int> v;
+    int x;
+    while(file>>x){
+        v.push_back(x);
+    }
+    sort(v.begin(), v.end());
+    for(auto x: v){
+        if(x%11==0){
+            count++;
+            if(x<mn1){
+                mn1=x;
+            }
+        }
+        if(x%17==0){
+            count2++;
+            if(x<mn2){
+                mn2=x;
+            }
+        }
+    }
+    if(count>count2){
+            cout<<count<<' '<<mn1;
+    }else{
+            cout<<count2<<' '<<mn2;
+    }
+}

@@ -1,0 +1,156 @@
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <string>
+#include <map>
+using namespace std;
+
+struct File {
+	string name;
+	int weiht;
+	string type;
+	string data_sozd;
+	string last_izm;
+	string level;
+};
+
+vector<File> v;
+
+
+void read() {
+	fstream file("files.csv");
+	string s;
+	while (getline(file, s)) {
+
+		int p = s.find(",");
+		string name = s.substr(0, p);
+		s.erase(s.begin(), s.begin() + p + 1);
+
+		p = s.find(",");
+		string razmer = s.substr(0, p);
+		s.erase(s.begin(), s.begin() + p + 1);
+
+		int raz_int = atoi(razmer.c_str());
+
+		p = s.find(",");
+		string type = s.substr(0, p);
+		s.erase(s.begin(), s.begin() + p + 1);
+
+		p = s.find(",");
+		string data_sozd = s.substr(0, p);
+		s.erase(s.begin(), s.begin() + p + 1);
+
+		p = s.find(",");
+		string last_izm = s.substr(0, p);
+		s.erase(s.begin(), s.begin() + p + 1);
+
+		string level = s;
+
+		File t;
+		t.name = name;
+		t.weiht = raz_int;
+		t.type = type;
+		t.data_sozd = data_sozd;
+		t.last_izm = last_izm;
+		t.level = level;
+
+		v.push_back(t);
+
+	}
+}
+
+void cou() {
+	map<string, int> m;
+	for (int i = 0; i < v.size(); i++) {
+		m[v[i].type]++;
+	}
+	for (auto element : m) {
+		cout << element.first << ' ' << element.second << endl;
+	}
+}
+
+void Sort() {
+	for (int i = 0; i < v.size() - 1; i++) {
+		for (int j = v.size() - 2; j >= i; j--) {
+			if (v[j].weiht < v[j + 1].weiht) {
+				File b = v[j];
+				v[j] = v[j + 1];
+				v[j + 1] = b;
+			}
+		}
+	}
+	for (int i = 0; i < 10; i++) {
+		cout << v[i].name << ' ' << v[i].weiht << endl;
+	}
+}
+
+void Sort1() {
+	vector<File> a;
+	for (int i = 0; i < v.size(); i++) {
+		if (v[i].type == "презентация") {
+			a.push_back(v[i]);
+		}
+	}
+
+	for (int i = 0; i < a.size() - 1; i++) {
+		for (int j = a.size() - 2; j >= i; j--) {
+			if (a[j].name > a[j + 1].name) {
+				File b = a[j];
+				a[j] = a[j + 1];
+				a[j + 1] = b;
+			}
+		}
+	}
+	for (int i = 0; i < a.size(); i++) {
+		cout << a[i].name << ' ' << a[i].last_izm << endl;
+	}
+}
+
+void Sort2() {
+	vector<File> k;
+	for (int i = 0; i < v.size(); i++) {
+		if (v[i].type == "видео" && v[i].weiht / 1024 >= 100) {
+			k.push_back(v[i]);
+		}
+	}
+
+	for (int i = 0; i < k.size() - 1; i++) {
+		for (int j = k.size() - 2; j >= i; j--) {
+			if (k[j].weiht < k[j + 1].weiht) {
+				File b = k[j];
+				k[j] = k[j + 1];
+				k[j + 1] = b;
+			}
+		}
+	}
+
+	for (int i = 0; i < k.size(); i++) {
+		cout << k[i].name << ' ' << k[i].weiht << ' ' << k[i].type << ' ' << k[i].data_sozd << ' ' << k[i].last_izm << ' ' << k[i].level << endl;
+	}
+}
+
+int main() {
+	setlocale(LC_ALL, "Russian");
+	cout << "Введите 1, если хотите узнать количество каждого типа файлов " << endl;
+	cout << "Введите 2, если хотите увидеть список самых больших файлов" << endl;
+	cout << "Введите 3, если хотите увидеть список презентаций" << endl;
+	cout << "Введите 5, чтобы вывести список видеофайлов D" << endl;
+	
+	read();
+	int c = 9;
+	while (c != 0) {
+		cin >> c;
+		if (c == 1) {
+			cou();
+		}
+		if (c == 2) {
+			Sort();
+		}
+		if (c == 3) {
+			Sort1();
+		}
+		if (c == 4) {
+			Sort2();
+		}
+	}
+}
